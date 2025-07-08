@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYR I VIBE | Mini Games</title>
+    <style>
+        :root {
+            --neon-blue: #00f0ff;
+            --neon-pink: #ff00ff;
+            --neon-purple: #9d00ff;
+            --neon-green: #00ffaa;
+            --neon-yellow: #fff000;
+            --neon-red: #ff4d4d;
+            --dark-bg: #0a0a1a;
+            --darker-bg: #050510;
+            --card-bg: rgba(15, 15, 35, 0.8);
+            --text-light: #f0f0f0;
+            --text-muted: #b0b0b0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(0, 240, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, rgba(255, 0, 255, 0.05) 0%, transparent 20%);
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(0, 240, 255, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 0.7rem 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            z-index: 100;
+            box-shadow: 0 0 15px rgba(0, 240, 252, 0.3);
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+            background: rgba(0, 240, 252, 0.2);
+            transform: translateX(-5px);
+            box-shadow: 0 0 20px rgba(0, 240, 252, 0.5);
+        }
+
+        .header {
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 100px var(--neon-blue),
+                         0 0 200px var(--neon-purple),
+                         0 0 30px rgba(157, 0, 255, 0.5);
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+            padding: 0 15px;
+        }
+
+        .header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            border-radius: 3px;
+        }
+
+        .popular-game {
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid var(--neon-purple);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px auto;
+            max-width: 600px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(157, 0, 255, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 20px rgba(157, 0, 255, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(157, 0, 255, 0.4); }
+            100% { box-shadow: 0 0 20px rgba(157, 0, 255, 0.2); }
+        }
+
+        .popular-game h3 {
+            color: var(--neon-purple);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .popular-game p {
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .popular-game .play-btn {
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .game-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .game-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .game-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            pointer-events: none;
+        }
+
+        .game-content {
+            padding: 1.5rem;
+        }
+
+        .game-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .game-description {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .play-btn {
+            display: block;
+            width: 100%;
+            padding: 0.8rem;
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            transition: all 0.3s;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+        }
+
+        .play-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ألوان مميزة لكل لعبة */
+        .game-card[data-game="cps"] {
+            border: 1px solid var(--neon-blue);
+        }
+        .game-card[data-game="cps"]::before {
+            background: var(--neon-blue);
+        }
+        .game-card[data-game="cps"] .game-title {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+        .game-card[data-game="cps"] .play-btn {
+            background: linear-gradient(135deg, var(--neon-blue), #0066ff);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+        }
+        .game-card[data-game="cps"] .stat i {
+            color: var(--neon-blue);
+        }
+        .game-card[data-game="cps"]:hover {
+            box-shadow: 0 15px 40px rgba(0, 240, 255, 0.4);
+        }
+
+        .game-card[data-game="memory"] {
+            border: 1px solid var(--neon-purple);
+        }
+        .game-card[data-game="memory"]::before {
+            background: var(--neon-purple);
+        }
+        .game-card[data-game="memory"] .game-title {
+            color: var(--neon-purple);
+            text-shadow: 0 0 10px var(--neon-purple);
+        }
+        .game-card[data-game="memory"] .play-btn {
+            background: linear-gradient(135deg, var(--neon-purple), #6a00ff);
+            box-shadow: 0 0 15px rgba(157, 0, 255, 0.3);
+        }
+        .game-card[data-game="memory"] .stat i {
+            color: var(--neon-purple);
+        }
+        .game-card[data-game="memory"]:hover {
+            box-shadow: 0 15px 40px rgba(157, 0, 255, 0.4);
+        }
+
+        .game-card[data-game="aim"] {
+            border: 1px solid var(--neon-green);
+        }
+        .game-card[data-game="aim"]::before {
+            background: var(--neon-green);
+        }
+        .game-card[data-game="aim"] .game-title {
+            color: var(--neon-green);
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+        .game-card[data-game="aim"] .play-btn {
+            background: linear-gradient(135deg, var(--neon-green), #00cc88);
+            box-shadow: 0 0 15px rgba(0, 255, 170, 0.3);
+        }
+        .game-card[data-game="aim"] .stat i {
+            color: var(--neon-green);
+        }
+        .game-card[data-game="aim"]:hover {
+            box-shadow: 0 15px 40px rgba(0, 255, 170, 0.4);
+        }
+
+        .game-card[data-game="typing"] {
+            border: 1px solid var(--neon-yellow);
+        }
+        .game-card[data-game="typing"]::before {
+            background: var(--neon-yellow);
+        }
+        .game-card[data-game="typing"] .game-title {
+            color: var(--neon-yellow);
+            text-shadow: 0 0 10px var(--neon-yellow);
+        }
+        .game-card[data-game="typing"] .play-btn {
+            background: linear-gradient(135deg, var(--neon-yellow), #ffcc00);
+            box-shadow: 0 0 15px rgba(255, 240, 0, 0.3);
+        }
+        .game-card[data-game="typing"] .stat i {
+            color: var(--neon-yellow);
+        }
+        .game-card[data-game="typing"]:hover {
+            box-shadow: 0 15px 40px rgba(255, 240, 0, 0.4);
+        }
+
+        .game-card[data-game="reaction"] {
+            border: 1px solid var(--neon-pink);
+        }
+        .game-card[data-game="reaction"]::before {
+            background: var(--neon-pink);
+        }
+        .game-card[data-game="reaction"] .game-title {
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px var(--neon-pink);
+        }
+        .game-card[data-game="reaction"] .play-btn {
+            background: linear-gradient(135deg, var(--neon-pink), #ff0099);
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+        }
+        .game-card[data-game="reaction"] .stat i {
+            color: var(--neon-pink);
+        }
+        .game-card[data-game="reaction"]:hover {
+            box-shadow: 0 15px 40px rgba(255, 0, 255, 0.4);
+        }
+
+        .game-card[data-game="math"] {
+            border: 1px solid var(--neon-red);
+        }
+        .game-card[data-game="math"]::before {
+            background: var(--neon-red);
+        }
+        .game-card[data-game="math"] .game-title {
+            color: var(--neon-red);
+            text-shadow: 0 0 10px var(--neon-red);
+        }
+        .game-card[data-game="math"] .play-btn {
+            background: linear-gradient(135deg, var(--neon-red), #ff3333);
+            box-shadow: 0 0 15px rgba(255, 77, 77, 0.3);
+        }
+        .game-card[data-game="math"] .stat i {
+            color: var(--neon-red);
+        }
+        .game-card[data-game="math"]:hover {
+            box-shadow: 0 15px 40px rgba(255, 77, 77, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .back-btn {
+                top: 1rem;
+                right: 1rem;
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <button class="back-btn" onclick="window.history.back()">
+            <i class="fas fa-arrow-right"></i> العودة
+        </button>
+        
+        <header class="header">
+            <h1><i class="fas fa-gamepad"></i> ألعاب سريعة</h1>
+            
+            <div class="popular-game" id="popularGame">
+                <h3><i class="fas fa-info-circle"></i> لا توجد إحصائيات بعد</h3>
+                <p>إلعب الألعاب لتبدأ الإحصائيات</p>
+            </div>
+            
+            <p>اختبر مهاراتك في هذه الألعاب الصغيرة الممتعة!</p>
+        </header>
+        
+        <div class="games-grid">
+            <!-- لعبة CPS -->
+            <div class="game-card" data-game="cps">
+                <img src="https://i.imgur.com/JQ1Zf8a.png" alt="CPS Test" class="game-image">
+                <div class="game-content">
+                    <h3 class="game-title">اختبار سرعة النقر</h3>
+                    <p class="game-description">
+                        اختبر سرعة نقراتك في الثانية (CPS) في هذا التحدي المثير!
+                    </p>
+                    <div class="game-stats">
+                        <span class="stat"><i class="fas fa-clock"></i> 5-60 ثانية</span>
+                        <span class="stat"><i class="fas fa-trophy"></i> تحدي السرعة</span>
+                    </div>
+                    <a href="https://thefoxyt15.github.io/syr-vibe/" class="play-btn">العب الآن</a>
+                </div>
+            </div>
+            
+            <!-- لعبة الذاكرة -->
+            <div class="game-card" data-game="memory">
+                <img src="https://i.imgur.com/8XZwZ9Q.png" alt="Memory Game" class="game-image">
+                <div class="game-content">
+                    <h3 class="game-title">اختبار الذاكرة السريعة</h3>
+                    <p class="game-description">
+                        تدرب على ذاكرتك البصرية!
+                    </p>
+                    <div class="game-stats">
+                        <span class="stat"><i class="fas fa-brain"></i> الذاكرة</span>
+                        <span class="stat"><i class="fas fa-sliders-h"></i> صعوبة متدرجة</span>
+                    </div>
+                    <a href="https://thefoxyt15.github.io/syr-vibe/" class="play-btn">العب الآن</a>
+                </div>
+            </div>
+            
+            <!-- لعبة التصويب -->
+            <div class="game-card" data-game="aim">
+                <img src="https://i.imgur.com/3zVWQ9B.png" alt="Aim Trainer" class="game-image">
+                <div class="game-content">
+                    <h3 class="game-title">مدرب التصويب</h3>
+                    <p class="game-description">
+                        حسن دقتك وسرعة رد فعلك!
+                    </p>
+                    <div class="game-stats">
+                        <span class="stat"><i class="fas fa-bullseye"></i> الدقة</span>
+                        <span class="stat"><i class="fas fa-stopwatch"></i> 30 ثانية</span>
+                    </div>
+                    <a href="https://thefoxyt15.github.io/syr-vibe/" class="play-btn">العب الآن</a>
+                </div>
+            </div>
+            
+            <!-- لعبة الكتابة السريعة -->
+            <div class="game-card" data-game="typing">
+                <img src="https://i.imgur.com/5XZwJ9Q.png" alt="Typing Game" class="game-image">
+                <div class="game-content">
+                    <h3 class="game-title">اختبار سرعة الكتابة</h3>
+                    <p class="game-description">
+                        اختبر سرعة كتابتك ودقتك!
+                    </p>
+                    <div class="game-stats">
+                        <span class="stat"><i class="fas fa-keyboard"></i> الكتابة</span>
+                        <span class="stat"><i class="fas fa-stopwatch"></i> 60 ثانية</span>
+                    </div>
+                    <a href="https://thefoxyt15.github.io/syr-vibe/" class="play-btn">العب الآن</a>
+                </div>
+            </div>
+            
+            <!-- لعبة رد الفعل -->
+            <div class="game-card" data-game="reaction">
+                <img src="https://i.imgur.com/7XZwK9Q.png" alt="Reaction Game" class="game-image">
+                <div class="game-content">
+                    <h3 class="game-title">اختبار سرعة رد الفعل</h3>
+                    <p class="game-description">
+                        قيس سرعة رد فعلك!
+                    </p>
+                    <div class="game-stats">
+                        <span class="stat"><i class="fas fa-bolt"></i> السرعة</span>
+                        <span class="stat"><i class="fas fa-tachometer-alt"></i> 20 محاولة</span>
+                    </div>
+                    <a href="https://thefoxyt15.github.io/syr-vibe/" class="play-btn">العب الآن</a>
+                </div>
+            </div>
+            
+            <!-- لعبة الرياضيات -->
+            <div class="game-card" data-game="math">
+                <img src="https://i.imgur.com/9XZwL9Q.png" alt="Math Game" class="game-image">
+                <div class="game-content">
+                    <h3 class="game-title">تحدي الرياضيات</h3>
+                    <p class="game-description">
+                        اختبر مهاراتك الحسابية!
+                    </p>
+                    <div class="game-stats">
+                        <span class="stat"><i class="fas fa-calculator"></i> الحساب</span>
+                        <span class="stat"><i class="fas fa-layer-group"></i> 10 مستويات</span>
+                    </div>
+                    <a href="https://thefoxyt15.github.io/syr-vibe/" class="play-btn">العب الآن</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 5 + 2;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100 + 100;
+                const duration = Math.random() * 15 + 10;
+                const delay = Math.random() * 5;
+                const opacity = Math.random() * 0.3 + 0.1;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.opacity = opacity;
+                
+                particlesContainer.appendChild(particle);
+            }
+
+            if (!localStorage.getItem('gamesData')) {
+                const gamesData = {
+                    cps: { plays: 0, name: "اختبار سرعة النقر", description: "اختبر سرعة نقراتك في الثانية (CPS)" },
+                    memory: { plays: 0, name: "اختبار الذاكرة السريعة", description: "تدرب على ذاكرتك البصرية" },
+                    aim: { plays: 0, name: "مدرب التصويب", description: "حسن دقتك وسرعة رد فعلك" },
+                    typing: { plays: 0, name: "اختبار سرعة الكتابة", description: "اختبر مهاراتك في الكتابة السريعة" },
+                    reaction: { plays: 0, name: "اختبار سرعة رد الفعل", description: "قيس سرعة استجابتك للمؤثرات" },
+                    math: { plays: 0, name: "تحدي الرياضيات", description: "اختبر مهاراتك الحسابية" }
+                };
+                localStorage.setItem('gamesData', JSON.stringify(gamesData));
+            }
+
+            updatePopularGame();
+
+            document.querySelectorAll('.play-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const gameId = this.closest('.game-card').getAttribute('data-game');
+                    trackGamePlay(gameId);
+                    window.location.href = this.href;
+                });
+            });
+        });
+
+        function updatePopularGame() {
+            const gamesData = JSON.parse(localStorage.getItem('gamesData'));
+            let popularGame = { id: '', name: '', description: '', plays: 0 };
+
+            for (const [id, data] of Object.entries(gamesData)) {
+                if (data.plays > popularGame.plays) {
+                    popularGame = { id, ...data };
+                }
+            }
+
+            const popularGameElement = document.getElementById('popularGame');
+            if (popularGame.plays > 0) {
+                popularGameElement.innerHTML = `
+                    <h3><i class="fas fa-crown"></i> اللعبة الأكثر لعباً</h3>
+                    <p><strong>${popularGame.name}</strong> - ${popularGame.description}</p>
+                    <p>تم لعبها ${popularGame.plays} مرات</p>
+                    <a href="https://thefoxyt15.github.io/syr-vibe/" class="play-btn">العب ${popularGame.name}</a>
+                `;
+
+                popularGameElement.querySelector('.play-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    trackGamePlay(popularGame.id);
+                    window.location.href = this.href;
+                });
+            }
+        }
+
+        function trackGamePlay(gameId) {
+            const gamesData = JSON.parse(localStorage.getItem('gamesData'));
+            if (gamesData[gameId]) {
+                gamesData[gameId].plays++;
+                localStorage.setItem('gamesData', JSON.stringify(gamesData));
+                updatePopularGame();
+            }
+        }
+    </script>
+</body>
+</html>
